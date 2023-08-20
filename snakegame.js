@@ -9,14 +9,6 @@ class Cell {
 
 
 class Snake {
-    directionX;
-    directionY;
-    body = []
-    unitSize;
-    snakeTail;
-    snakeColor
-
-
 
 
     constructor(x, y, directionX, directionY, unitSize, color) {
@@ -28,6 +20,7 @@ class Snake {
         this.unitSize = unitSize;
         this.snakeColor = color
 
+
     }
 
     move() {
@@ -38,9 +31,15 @@ class Snake {
         x = oldHead.x + this.directionX * this.unitSize
         y = oldHead.y + this.directionY * this.unitSize
 
-        const newHead = [new Cell(x, y)]
-        this.snakeTail.unshift(newHead)
-        this.snakeTail.pop()
+        const newHead = new Cell(x, y)
+        this.snakeBody.unshift(newHead)
+        this.snakeBody.pop()
+
+    }
+    eatApple(){
+        let head = this.snakeBody[0];
+        let cell = new Cell(head.x, head.y);
+        this.snakeBody.unshift(cell)                                                                                                                              
     }
 
 
