@@ -7,6 +7,7 @@ class GamePlay {
     width;
     height;
     unitSize;
+    hasApple;
 
     constructor(width, height, canvasColor, unitSize) {
         this.apple = new Apple(3, 4, 'red');
@@ -22,6 +23,8 @@ class GamePlay {
         this.canvasColor = canvasColor
         this.unitSize = unitSize
 
+        this.hasApple = false
+
         this.snake = new Snake(0, 0, 0, 1, unitSize, 'black')
 
     }
@@ -29,13 +32,21 @@ class GamePlay {
     createApple() {
         let numberOfsquare = this.canvas.width / this.unitSize
 
-        let locationX = Math.floor(Math.random() * (numberOfsquare))
-        let locationY = Math.floor(Math.random() * (numberOfsquare))
+        while (this.hasApple == false) {
+            let locationX = Math.floor(Math.random() * (numberOfsquare))
+            let locationY = Math.floor(Math.random() * (numberOfsquare))
 
-        let x = locationX * this.unitSize
-        let y = locationY * this.unitSize
+            let x = locationX * this.unitSize
+            let y = locationY * this.unitSize
 
-        this.apple = new Apple(x, y, 'red')
+           let isAppleOnSnake = this.positionSnake()
+            if (isAppleOnSnake == false){
+                this.apple = new Apple(x, y, 'red')
+                this.hasApple = true
+            }
+        }
+
+
 
     }
     drawRect(color, x, y, Width, Height) {
@@ -61,7 +72,7 @@ class GamePlay {
             console.log('gfasdfaf');
             console.log(cell);
         }
-        
+
     }
     draw() {
         this.drawBackGroud();
@@ -75,17 +86,25 @@ class GamePlay {
     isAppleEaten() {
         let head = this.snake.snakeBody[0]
         let apple = this.apple
-        if (head.x == apple.x && head.y == apple.y){
+        if (head.x == apple.x && head.y == apple.y) {
             this.eatApple()
             this.createApple()
         }
+    }
+    positionSnake(inputX, inputY) {
+        for (let cell of this.snake.snakeBody) {
+            if (cell.x == inputX && cell.y == inputY) {
+                return true;
+            }
+        }
+        return false;
     }
 
     update() {
         this.createApple();
         this.snake.move();
         this.isSnakeBodyHit();
-        this.isSnakeBodyHit();
+        this.isAppleEaten();
     }
 }
 
@@ -94,9 +113,14 @@ const game = new GamePlay(600, 600, 'pink', 40)
 game.createApple();
 game.draw();
 game.snake.move();
-game.snake.move()
+game.snake.move();
+game.update();
 game.snake.turnRight()
-game.snake.move()
+game.snake.eatApple();
+for (let i = 0; i < 10; i++) {
+    game.snake.move();
+}
+
 game.draw();
 
 
